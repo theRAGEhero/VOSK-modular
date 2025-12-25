@@ -16,7 +16,7 @@ interface RouteContext {
 function buildRoundUrl(request: NextRequest, roundId: string) {
   const host = request.headers.get('host');
   const protocol = request.headers.get('x-forwarded-proto') || 'http';
-  const baseUrl = host ? `${protocol}://${host}` : 'http://localhost:3009';
+  const baseUrl = host ? `${protocol}://${host}` : 'http://localhost:3011';
   return `${baseUrl}/rounds/${roundId}`;
 }
 
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
       width: 320
     });
 
-    return new NextResponse(pngBuffer, {
+    return new NextResponse(new Uint8Array(pngBuffer), {
       headers: {
         'Content-Type': 'image/png',
         'Cache-Control': 'public, max-age=3600'
