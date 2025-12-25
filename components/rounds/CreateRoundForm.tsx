@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { DEFAULT_VOSK_LANGUAGE, VOSK_LANGUAGE_OPTIONS } from '@/lib/vosk/languages'
 
 interface CreateRoundFormProps {
   onSuccess?: (roundId: string) => void
@@ -14,7 +15,7 @@ export function CreateRoundForm({ onSuccess }: CreateRoundFormProps) {
   const router = useRouter()
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  const [language] = useState('en')
+  const [language, setLanguage] = useState(DEFAULT_VOSK_LANGUAGE)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -110,12 +111,22 @@ export function CreateRoundForm({ onSuccess }: CreateRoundFormProps) {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">
+            <label htmlFor="language" className="text-sm font-medium">
               Language
             </label>
-            <div className="rounded-md border border-input bg-muted px-3 py-2 text-sm text-muted-foreground">
-              English (local VOSK model)
-            </div>
+            <select
+              id="language"
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              disabled={isSubmitting}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {VOSK_LANGUAGE_OPTIONS.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
 
           <Button

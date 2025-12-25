@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getRounds, createRound } from '@/lib/storage/rounds';
 import { Round, RoundStatus } from '@/types/round';
 import { getLogger, createRequestId } from '@/lib/logging/logger';
+import { DEFAULT_VOSK_LANGUAGE, isVoskLanguage } from '@/lib/vosk/languages';
 
 const logger = getLogger('api.rounds');
 
@@ -46,10 +47,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const normalizedLanguage = 'en';
+    const normalizedLanguage = typeof language === 'string' && language.trim().length > 0
+      ? language.trim()
+      : DEFAULT_VOSK_LANGUAGE;
 
-    if (language && language !== 'en') {
-      log.warn('Ignoring unsupported language', { language });
+    if (!isVoskLanguage(normalizedLanguage)) {
+      log.warn('Invalid language provided', { language: normalizedLanguage });
+      return NextResponse.json(
+        { error: 'Language is not supported' },
+        { status: 400 }
+      );
     }
 
     const round: Round = {

@@ -13,7 +13,7 @@ Audio recording and transcription platform using local VOSK and Next.js.
 ## Prerequisites
 
 - Node.js 18+ and npm
-- Local VOSK model (English)
+- Local VOSK models (English + Italian)
 - Python 3 with virtual environment support
 - ffmpeg
 
@@ -36,21 +36,24 @@ Audio recording and transcription platform using local VOSK and Next.js.
    ./.venv/bin/pip install vosk
    ```
 
-5. Place the VOSK model in `./models/vosk-model-en-us-0.22-lgraph`
-   - Update `VOSK_MODEL_PATH` in `.env.local` if you use a different path.
+5. Place the VOSK models in:
+   - `./models/vosk-model-en-us-0.22-lgraph`
+   - `./models/vosk-model-small-it-0.22`
+   - Update `VOSK_MODEL_EN` / `VOSK_MODEL_IT` in `.env.local` if you use different paths.
 
 6. Run the development server:
    ```bash
    npm run dev
    ```
 
-7. Open [http://localhost:3000](http://localhost:3000) in your browser
+7. Open [http://localhost:3009](http://localhost:3009) in your browser
 
 ## Environment Variables
 
 See `.env.example` for required configuration:
 
-- `VOSK_MODEL_PATH`: Path to the local VOSK model (required)
+- `VOSK_MODEL_EN`: Path to the local VOSK English model (required)
+- `VOSK_MODEL_IT`: Path to the local VOSK Italian model (required)
 - `VOSK_PYTHON`: Python interpreter for the local venv (required)
 - `NEXT_PUBLIC_MAX_FILE_SIZE`: Maximum upload file size in bytes (default: 100MB)
 - `NEXT_PUBLIC_ALLOWED_MEDIA_TYPES`: Comma-separated list of allowed media types

@@ -79,9 +79,9 @@ export interface Statistics {
   duration_seconds: number;
 }
 
-// Intermediate types for processing Deepgram responses
+// Intermediate types for processing transcription responses
 
-export interface DeepgramWord {
+export interface TranscriptionWord {
   word: string;
   start: number;
   end: number;

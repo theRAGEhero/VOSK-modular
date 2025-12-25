@@ -1,21 +1,20 @@
 /**
  * Speaker grouping utilities
- * Ported from Podfree-Editor: deepgram_transcribe_debates.py lines 71-123
+ * Ported from Podfree-Editor: transcribe_debates.py lines 71-123
  */
 
-import { DeepgramWord, GroupedContribution } from '@/types/deliberation';
+import { TranscriptionWord, GroupedContribution } from '@/types/deliberation';
 
 /**
- * Group consecutive words by the same speaker into contributions
- * Port of group_words_by_speaker() from Python (lines 71-123)
+ * Group consecutive words by the same speaker into contributions.
  *
- * This function takes an array of words from Deepgram (each with a speaker ID)
+ * This function takes an array of words (each with a speaker ID)
  * and groups consecutive words from the same speaker into single "contributions".
  *
- * @param words - Array of words from Deepgram response with speaker IDs
+ * @param words - Array of words with speaker IDs
  * @returns Array of contributions grouped by speaker
  */
-export function groupWordsBySpeaker(words: DeepgramWord[]): GroupedContribution[] {
+export function groupWordsBySpeaker(words: TranscriptionWord[]): GroupedContribution[] {
   const contributions: GroupedContribution[] = [];
 
   if (!words || words.length === 0) {

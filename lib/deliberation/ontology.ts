@@ -1,24 +1,23 @@
 /**
  * Deliberation Ontology creation utilities
- * Ported from Podfree-Editor: deepgram_transcribe_debates.py lines 125-225
+ * Ported from Podfree-Editor: transcribe_debates.py lines 125-225
  */
 
-import { DeliberationOntology, DeepgramWord } from '@/types/deliberation';
+import { DeliberationOntology, TranscriptionWord } from '@/types/deliberation';
 import { groupWordsBySpeaker } from './grouper';
 import { formatTimestamp, cleanFilename } from './formatter';
 
 /**
- * Create Deliberation Ontology JSON structure from Deepgram response
- * Port of create_deliberation_ontology_json() from Python (lines 125-225)
+ * Create Deliberation Ontology JSON structure from transcription response.
  *
- * This function transforms the raw Deepgram API response into a structured
+ * This function transforms the raw transcription response into a structured
  * Deliberation Ontology format that includes:
  * - Process metadata (name, topic, duration)
  * - Participant information with statistics
  * - Individual contributions with timestamps
  * - Overall statistics
  *
- * @param responseDict - Raw Deepgram API response
+ * @param responseDict - Raw transcription response
  * @param audioFilename - Original audio filename
  * @returns DeliberationOntology structure
  */
@@ -27,9 +26,9 @@ export function createDeliberationOntology(
   audioFilename: string,
   language?: string
 ): DeliberationOntology {
-  // Extract basic data from Deepgram response
+  // Extract basic data from transcription response
   const transcriptData = responseDict.results?.channels?.[0]?.alternatives?.[0];
-  const words: DeepgramWord[] = transcriptData?.words ?? [];
+  const words: TranscriptionWord[] = transcriptData?.words ?? [];
   const metadata = responseDict.metadata ?? {};
   const resolvedLanguage = language ?? metadata.language ?? "en";
 

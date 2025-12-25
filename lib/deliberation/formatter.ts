@@ -1,6 +1,6 @@
 /**
  * Timestamp formatting utilities
- * Ported from Podfree-Editor: deepgram_transcribe_debates.py lines 63-69
+ * Ported from Podfree-Editor: transcribe_debates.py lines 63-69
  */
 
 /**

@@ -4,8 +4,8 @@ const next = require('next')
 const WebSocket = require('ws')
 
 const dev = process.env.NODE_ENV !== 'production'
-const hostname = 'localhost'
-const port = parseInt(process.env.PORT || '3002', 10)
+const hostname = '0.0.0.0'
+const port = parseInt(process.env.PORT || '3011', 10)
 
 const app = next({ dev, hostname, port })
 const handle = app.getRequestHandler()

@@ -19,7 +19,7 @@ interface VoskResult {
   duration?: number;
 }
 
-export interface DeepgramLikeResponse {
+export interface TranscriptionResponse {
   metadata: {
     model: string;
     language: string;
@@ -47,13 +47,17 @@ function resolveVoskPython(): string {
   return process.env.VOSK_PYTHON || path.join(process.cwd(), '.venv', 'bin', 'python');
 }
 
-function resolveVoskModelPath(): string {
-  return process.env.VOSK_MODEL_PATH || path.join(process.cwd(), 'models', 'vosk-model-en-us-0.22-lgraph');
+function resolveVoskModelPath(language: string): string {
+  const lang = language.toLowerCase();
+  if (lang.startsWith('it')) {
+    return process.env.VOSK_MODEL_IT || path.join(process.cwd(), 'models', 'vosk-model-small-it-0.22');
+  }
+  return process.env.VOSK_MODEL_EN || path.join(process.cwd(), 'models', 'vosk-model-en-us-0.22-lgraph');
 }
 
-async function runVoskScript(inputPath: string): Promise<VoskResult> {
+async function runVoskScript(inputPath: string, language: string): Promise<VoskResult> {
   const python = resolveVoskPython();
-  const modelPath = resolveVoskModelPath();
+  const modelPath = resolveVoskModelPath(language);
   const scriptPath = path.join(process.cwd(), 'scripts', 'vosk_transcribe.py');
   await fs.access(python);
   await fs.access(modelPath);
@@ -108,14 +112,14 @@ function averageConfidence(words: VoskWord[]): number {
   return total / words.length;
 }
 
-export async function transcribeWithVosk(inputPath: string, language: string = 'en'): Promise<DeepgramLikeResponse> {
-  const result = await runVoskScript(inputPath);
+export async function transcribeWithVosk(inputPath: string, language: string = 'en'): Promise<TranscriptionResponse> {
+  const result = await runVoskScript(inputPath, language);
   const words = result.result || [];
   const duration = typeof result.duration === 'number'
     ? result.duration
     : (words.length ? Math.max(...words.map(word => word.end || 0)) : 0);
 
-  const deepgramWords = words.map(word => ({
+  const wordEntries = words.map(word => ({
     word: word.word,
     start: word.start,
     end: word.end,
@@ -123,7 +127,7 @@ export async function transcribeWithVosk(inputPath: string, language: string = '
     speaker: 1
   }));
 
-  const response: DeepgramLikeResponse = {
+  const response: TranscriptionResponse = {
     metadata: {
       model: 'vosk',
       language,
@@ -137,7 +141,7 @@ export async function transcribeWithVosk(inputPath: string, language: string = '
             {
               transcript: result.text || '',
               confidence: averageConfidence(words),
-              words: deepgramWords
+              words: wordEntries
             }
           ]
         }

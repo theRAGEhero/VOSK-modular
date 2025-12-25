@@ -16,7 +16,7 @@ interface RouteContext {
 function buildRoundUrl(request: NextRequest, roundId: string) {
   const host = request.headers.get('host');
   const protocol = request.headers.get('x-forwarded-proto') || 'http';
-  const baseUrl = host ? `${protocol}://${host}` : 'http://localhost:3000';
+  const baseUrl = host ? `${protocol}://${host}` : 'http://localhost:3009';
   return `${baseUrl}/rounds/${roundId}`;
 }
 
